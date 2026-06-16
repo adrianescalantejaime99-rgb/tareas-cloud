@@ -4,10 +4,28 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const { createClient } = supabase;
 const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+let filtroActual = 'todas';
+let todasLasTareas = [];
+
 async function cargarTareas() {
   const { data, error } = await db.from('tareas').select('*').order('created_at');
   if (error) { console.error(error); return; }
-  renderTareas(data);
+  todasLasTareas = data;
+  aplicarFiltro();
+}
+
+function filtrar(filtro, btn) {
+  filtroActual = filtro;
+  document.querySelectorAll('.filtro').forEach(b => b.classList.remove('activo'));
+  btn.classList.add('activo');
+  aplicarFiltro();
+}
+
+function aplicarFiltro() {
+  let filtradas = todasLasTareas;
+  if (filtroActual === 'pendientes') filtradas = todasLasTareas.filter(t => !t.completada);
+  if (filtroActual === 'completadas') filtradas = todasLasTareas.filter(t => t.completada);
+  renderTareas(filtradas);
 }
 
 db.channel('tareas-canal')
@@ -35,6 +53,11 @@ async function eliminarTarea(id) {
   }
 }
 
+function formatearFecha(fecha) {
+  const d = new Date(fecha);
+  return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+}
+
 function renderTareas(tareas) {
   const cont = document.getElementById('tareas-container');
   document.getElementById('contador').textContent = '(' + tareas.length + ')';
@@ -44,6 +67,7 @@ function renderTareas(tareas) {
       <div class="tarea-info">
         <strong>${t.titulo}</strong>
         <span>Responsable: ${t.responsable}</span>
+        <span class="fecha">${formatearFecha(t.created_at)}</span>
       </div>
       <div class="tarea-acciones">
         <button onclick="toggleEstado('${t.id}', ${t.completada})">${t.completada ? 'Reabrir' : 'Completar'}</button>

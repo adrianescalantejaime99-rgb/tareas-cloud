@@ -21,6 +21,11 @@
     </section>
     <section class="lista">
       <h2>Lista de Tareas <span id="contador"></span></h2>
+      <div class="filtros">
+        <button class="filtro activo" onclick="filtrar('todas', this)">Todas</button>
+        <button class="filtro" onclick="filtrar('pendientes', this)">Pendientes</button>
+        <button class="filtro" onclick="filtrar('completadas', this)">Completadas</button>
+      </div>
       <div id="tareas-container">Cargando tareas...</div>
     </section>
   </main>

@@ -146,6 +146,37 @@ button:active {
   box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
 }
 
+.filtros {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.filtro {
+  flex: 1;
+  padding: 8px;
+  font-size: 0.85rem;
+  background: #e8e8e8;
+  color: #555;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filtro.activo {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+}
+
+.filtro:hover {
+  transform: translateY(-1px);
+}
+
+.fecha {
+  font-size: 0.75rem;
+  color: #aaa;
+}
+
 .vacio {
   text-align: center;
   color: #aaa;
