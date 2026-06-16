@@ -21,11 +21,18 @@ function filtrar(filtro, btn) {
   aplicarFiltro();
 }
 
+function actualizarPendientes() {
+  const pendientes = todasLasTareas.filter(t => !t.completada).length;
+  const el = document.getElementById('pendientes-count');
+  if (el) el.textContent = pendientes + ' tarea' + (pendientes !== 1 ? 's' : '') + ' pendiente' + (pendientes !== 1 ? 's' : '');
+}
+
 function aplicarFiltro() {
   let filtradas = todasLasTareas;
   if (filtroActual === 'pendientes') filtradas = todasLasTareas.filter(t => !t.completada);
   if (filtroActual === 'completadas') filtradas = todasLasTareas.filter(t => t.completada);
   renderTareas(filtradas);
+  actualizarPendientes();
 }
 
 db.channel('tareas-canal')
